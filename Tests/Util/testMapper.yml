@@ -1,0 +1,46 @@
+flexix_mapper:
+    applications: 
+           admin:
+                name: admin  
+                bundles:
+                    - flexix_entity_analyzer
+                   
+    entities:
+        flexix_entity_analyzer:
+            discount:
+                alias: discount
+                entity_class: Flexix\EntityAnalyzerBundle\Entity\Discount
+            measure_unit:
+                alias: measure-unit
+                entity_class: Flexix\EntityAnalyzerBundle\Entity\MeasureUnit
+            payment_frequency:
+                alias: payment-frequency
+                entity_class: Flexix\EntityAnalyzerBundle\Entity\PaymentFrequency
+            product:
+                alias: product
+                entity_class: Flexix\EntityAnalyzerBundle\Entity\Product
+            product_category:
+                alias: product-category
+                entity_class: Flexix\EntityAnalyzerBundle\Entity\ProductCategory
+            product_definition:
+                alias: product-definition
+                entity_class: Flexix\EntityAnalyzerBundle\Entity\ProductDefinition
+            product_dictionary:
+                alias: product-dictionary
+                entity_class: Flexix\EntityAnalyzerBundle\Entity\ProductDictionary
+            product_price:
+                alias: product-price
+                entity_class: Flexix\EntityAnalyzerBundle\Entity\ProductPrice
+            transaction:
+                alias: transaction
+                entity_class: Flexix\EntityAnalyzerBundle\Entity\Transaction
+            transaction_status:
+                alias: transaction-status
+                entity_class: Flexix\EntityAnalyzerBundle\Entity\TransactionStatus
+            transaction_type:
+                alias: transaction-type
+                entity_class: Flexix\EntityAnalyzerBundle\Entity\TransactionType
+       
+   
+
+   

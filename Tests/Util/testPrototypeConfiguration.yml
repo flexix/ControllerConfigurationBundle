@@ -1,0 +1,75 @@
+flexix_prototype:
+    base:
+        allowed: false
+        model: 
+            serviceName: xxx
+        templates:
+                 index: 'Default\Base\dashboard.html.twig'
+                 clean: 'Default\Base\ajax_index.html.twig'       
+    actions:
+        find:
+            allowed: true
+            model:
+                   serviceName:
+                   method:
+            searchFormType:
+                   serviceName:
+                   method:    
+            queryBuilder:
+                   type: #service,#object
+                   name:
+            templates:
+                container: 'Default\Container\list.html.twig'
+                element: 'Default\Element\list.html.twig'
+            limit: 10
+            hydrateMode: 1
+        query: 
+            allowed: true
+            queryBuilder:
+            templates:
+                container: 'Default\Container\list.html.twig'
+                element: 'Default\Element\list.html.twig'
+            limit: 10
+            hydrateMode: 1
+        create:
+            allowed: true
+            formType: 
+            redirect: # true
+                       route: '*read'
+                       route_params: null 
+            templates:
+                container: 'Default\Container\create.html.twig'
+                element: 'Default\Element\create.html.twig'
+            redirect: true    
+        new:
+            allowed: true
+            formType: 
+            redirect: # true
+                       route: '*read'
+                       route_params: null 
+            templates:
+                container: 'Default\Container\create.html.twig'
+                element: 'Default\Element\create.html.twig'
+            redirect: true     
+            
+        show: 
+            allowed: true
+            templates:
+                container: 'Default\Container\show.html.twig'
+                element: 'Default\Element\show.html.twig'
+        update:
+            allowed: true
+            redirect:
+                route: '*read'
+                route_params: null 
+            templates:
+                container: 'Default\Container\update.html.twig'
+                element: 'Default\Element\update.html.twig'
+        delete:
+            allowed: true
+            redirect:
+                route: '*list'
+                route_params: null
+            templates:
+                container: 'Default\Container\blank.html.twig'
+                element: 'Default\Element\delete.html.twig'   

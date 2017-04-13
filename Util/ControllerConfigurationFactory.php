@@ -10,27 +10,26 @@ use Flexix\ControllerConfigurationBundle\Util\ControllerConfigurationFactoryInte
 class ControllerConfigurationFactory implements ControllerConfigurationFactoryInterface {
 
     const BASE_CONFIG = 'base';
-    const REQUEST_ANALYZE = 'path_analyze';
+    const PATH_ANALYZE = 'path_analyze';
 
     protected $configurations = [];
     protected $baseConfiguration;
     protected $configuration;
-    protected $PathAnalyzer;
+    protected $pathAnalyzer;
 
-    public function __construct(ConfigurationInterface $baseConfig, PathAnalyzerInterface $PathAnalyzer) {
+    public function __construct(ConfigurationInterface $baseConfig, PathAnalyzerInterface $pathAnalyzer) {
 
         $this->baseConfiguration = $baseConfig;
-        $this->PathAnalyzer = $PathAnalyzer;
+        $this->pathAnalyzer = $pathAnalyzer;
     }
 
     public function createConfiguration(ConfigurationInterface $controllerConfiguration, $action, $applicationPath, $entitiesPath, $id = null) {
 
         $this->configuration = $controllerConfiguration;
 
-        $analyze = $this->PathAnalyzer->analyze($applicationPath, $entitiesPath, $id);
+        $analyze = $this->pathAnalyzer->analyze($applicationPath, $entitiesPath, $id);
         $analyzeSection = $this->getAnalyzeSection($analyze);
 
-        $applicationPath = $analyze->getApplicationPath();
         $entityAlias = $analyze->getEntityAlias();
 
         $this->mergeToConfiguration($this->baseConfiguration, $action);
@@ -78,7 +77,7 @@ class ControllerConfigurationFactory implements ControllerConfigurationFactoryIn
     protected function getAnalyzeSection($analyze) {
 
         $analyzeConfiguration = [];
-        $analyzeConfiguration[self::REQUEST_ANALYZE] = $analyze->dump();
+        $analyzeConfiguration[self::PATH_ANALYZE] = $analyze->dump();
 
         return $analyzeConfiguration;
     }

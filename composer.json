@@ -2,7 +2,7 @@
 {
     "name": "flexix/controller-configuration-bundle",
     "type": "symfony-bundle",
-    "description": "Symfony Flexix bundle",
+    "description": "Contorller configuration for Flexix controllers",
     "keywords": ["flexix","configuration","controller","bundle"],
     "homepage": "https://github.com/flexix/controller-configuration-bundle",
     "license": "MIT",

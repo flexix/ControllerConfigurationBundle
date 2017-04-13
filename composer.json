@@ -13,8 +13,9 @@
         }
     ],
     "require": {
-        "php": ">=7.*",
-        "symfony/framework-bundle": "3.*"
+        "php": "7.*",
+        "symfony/framework-bundle": "3.*",
+        "flexix/configuration-bundle": "dev-master"
     },
     "require-dev": { 
         "phpunit/phpunit": "6.*" 

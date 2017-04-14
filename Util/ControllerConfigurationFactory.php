@@ -6,7 +6,7 @@ use Flexix\ConfigurationBundle\Util\ConfigurationInterface;
 use Flexix\PathAnalyzerBundle\Util\PathAnalyzerInterface;
 use Flexix\ControllerConfigurationBundle\Util\ControllerConfigurationFactoryInterface;
 
-//@to do: change mergin model
+
 class ControllerConfigurationFactory implements ControllerConfigurationFactoryInterface {
 
     const BASE_CONFIG = 'base';
@@ -23,17 +23,17 @@ class ControllerConfigurationFactory implements ControllerConfigurationFactoryIn
         $this->pathAnalyzer = $pathAnalyzer;
     }
 
-    public function createConfiguration(ConfigurationInterface $controllerConfiguration, $action, $module, $alias, $id = null) {
+    public function createConfiguration(ConfigurationInterface $controllerConfiguration, $action, $alias, $module = null, $id = null) {
 
         $this->configuration = $controllerConfiguration;
 
         $analyze = $this->pathAnalyzer->analyze($module, $alias, $id);
         $analyzeSection = $this->getAnalyzeSection($analyze);
 
-        $entityAlias = $analyze->getEntityAlias();
+        $alias = $analyze->getEntityAlias();
 
         $this->mergeToConfiguration($this->baseConfiguration, $action);
-        $this->mergeConfigurations($module, $entityAlias, $action);
+        $this->mergeConfigurations($action, $alias, $module);
 
         $this->configuration->merge($analyzeSection);
         $controllerConfiguration->setAction($action);
@@ -82,9 +82,9 @@ class ControllerConfigurationFactory implements ControllerConfigurationFactoryIn
         return $analyzeConfiguration;
     }
 
-    protected function mergeConfigurations($applicationPath, $entityAlias, $action) {
+    protected function mergeConfigurations($action, $alias, $module = null) {
 
-        $configuration = $this->findSpecializedConfiguration($applicationPath, $entityAlias);
+        $configuration = $this->findSpecializedConfiguration($action, $alias, $module);
         if ($configuration) {
             $this->mergeToConfiguration($configuration, $action);
         }

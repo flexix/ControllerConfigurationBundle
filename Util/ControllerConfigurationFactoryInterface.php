@@ -8,8 +8,8 @@ use Flexix\PathAnalyzerBundle\Util\PathAnalyzerInterface;
 //@to do: change mergin model
 interface ControllerConfigurationFactoryInterface {
 
-    public function createConfiguration( ConfigurationInterface $controllerConfiguration, $action,$applicationPath,$entitiesPath,$id=null);
+    public function createConfiguration( ConfigurationInterface $controllerConfiguration, $action,$alias,$module=null,$id=null);
     
-    public function addConfiguration(ConfigurationInterface $configuration, $applicationPath, $entityAlias);
+    public function addConfiguration(ConfigurationInterface $configuration, $alias, $module);
 
 }

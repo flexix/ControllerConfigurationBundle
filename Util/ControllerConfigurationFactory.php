@@ -10,7 +10,7 @@ use Flexix\ControllerConfigurationBundle\Util\ControllerConfigurationFactoryInte
 class ControllerConfigurationFactory implements ControllerConfigurationFactoryInterface {
 
     const BASE_CONFIG = 'base';
-    const PATH_ANALYZE = 'path_analyze';
+    const PATH = 'path';
 
     protected $configurations = [];
     protected $baseConfiguration;
@@ -23,17 +23,17 @@ class ControllerConfigurationFactory implements ControllerConfigurationFactoryIn
         $this->pathAnalyzer = $pathAnalyzer;
     }
 
-    public function createConfiguration(ConfigurationInterface $controllerConfiguration, $action, $applicationPath, $entitiesPath, $id = null) {
+    public function createConfiguration(ConfigurationInterface $controllerConfiguration, $action, $module, $alias, $id = null) {
 
         $this->configuration = $controllerConfiguration;
 
-        $analyze = $this->pathAnalyzer->analyze($applicationPath, $entitiesPath, $id);
+        $analyze = $this->pathAnalyzer->analyze($module, $alias, $id);
         $analyzeSection = $this->getAnalyzeSection($analyze);
 
         $entityAlias = $analyze->getEntityAlias();
 
         $this->mergeToConfiguration($this->baseConfiguration, $action);
-        $this->mergeConfigurations($applicationPath, $entityAlias, $action);
+        $this->mergeConfigurations($module, $entityAlias, $action);
 
         $this->configuration->merge($analyzeSection);
         $controllerConfiguration->setAction($action);
@@ -77,7 +77,7 @@ class ControllerConfigurationFactory implements ControllerConfigurationFactoryIn
     protected function getAnalyzeSection($analyze) {
 
         $analyzeConfiguration = [];
-        $analyzeConfiguration[self::PATH_ANALYZE] = $analyze->dump();
+        $analyzeConfiguration[self::PATH] = $analyze->dump();
 
         return $analyzeConfiguration;
     }
@@ -91,17 +91,26 @@ class ControllerConfigurationFactory implements ControllerConfigurationFactoryIn
         return $this->configuration;
     }
 
-    protected function findSpecializedConfiguration($applicationPath, $entityAlias) {
+    protected function findSpecializedConfiguration($action, $alias, $module = null) {
 
-        if (array_key_exists($applicationPath, $this->configurations) && array_key_exists($entityAlias, $this->configurations[$applicationPath])) {
-
-            return $this->configurations[$applicationPath][$entityAlias];
+        if ($module) {
+            if (array_key_exists($action, $this->configurations) && array_key_exists($alias, $this->configurations[$action]) && array_key_exists($module, $this->configurations[$action][$alias])) {
+                return $this->configuration[$action][$alias][$module];
+            }
+        } else {
+            if (array_key_exists($action, $this->configurations) && array_key_exists($alias, $this->configurations[$action])) {
+                return $this->configuration[$action][$alias];
+            }
         }
     }
 
-    public function addConfiguration(ConfigurationInterface $configuration, $applicationPath, $entityAlias) {
+    public function addConfiguration(ConfigurationInterface $configuration, $action, $alias, $module = null) {
 
-        $this->configurations[$applicationPath][$entityAlias] = $configuration;
+        if ($module) {
+            $this->configurations[$action][$alias][$module] = $configuration;
+        } else {
+            $this->configurations[$action][$alias] = $configuration;
+        }
     }
 
 }

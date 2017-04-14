@@ -3,7 +3,7 @@
 namespace Flexix\ControllerConfigurationBundle\Util;
 
 use Flexix\ConfigurationBundle\Util\ConfigurationInterface;
-use Flexix\PathAnalyzerBundle\Util\PathAnalyzerInterface;
+use Flexix\MapperBundle\Util\EntityMapperInterface;
 use Flexix\ControllerConfigurationBundle\Util\ControllerConfigurationFactoryInterface;
 
 
@@ -15,23 +15,19 @@ class ControllerConfigurationFactory implements ControllerConfigurationFactoryIn
     protected $configurations = [];
     protected $baseConfiguration;
     protected $configuration;
-    protected $pathAnalyzer;
+    protected $mapper;
 
-    public function __construct(ConfigurationInterface $baseConfig, PathAnalyzerInterface $pathAnalyzer) {
+
+    public function __construct(ConfigurationInterface $baseConfig,EntityMapperInterface $mapper) {
 
         $this->baseConfiguration = $baseConfig;
-        $this->pathAnalyzer = $pathAnalyzer;
+        $this->mapper=$mapper;
     }
 
     public function createConfiguration(ConfigurationInterface $controllerConfiguration, $action, $alias, $module = null, $id = null) {
 
         $this->configuration = $controllerConfiguration;
-
-        $analyze = $this->pathAnalyzer->analyze($module, $alias, $id);
-        $analyzeSection = $this->getAnalyzeSection($analyze);
-
-        $alias = $analyze->getEntityAlias();
-
+        $analyzeSection = $this->getAnalyzeSection($module, $alias, $id);
         $this->mergeToConfiguration($this->baseConfiguration, $action);
         $this->mergeConfigurations($action, $alias, $module);
 
@@ -74,10 +70,10 @@ class ControllerConfigurationFactory implements ControllerConfigurationFactoryIn
         }
     }
 
-    protected function getAnalyzeSection($analyze) {
+    protected function getAnalyzeSection($action, $alias, $module = null) {
 
         $analyzeConfiguration = [];
-        $analyzeConfiguration[self::PATH] = $analyze->dump();
+        $analyzeConfiguration[self::PATH] = ['class'=>$this->mapper->getEntityClass($alias), 'action'=>$action, 'alias'=>$alias, 'module'=>$module];
 
         return $analyzeConfiguration;
     }

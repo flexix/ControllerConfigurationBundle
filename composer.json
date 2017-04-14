@@ -14,7 +14,7 @@
         }
     ],
     "require": {
-        "php": "7.*",
+        "php": ">=5.5.9",
         "symfony/framework-bundle": "3.*",
         "flexix/configuration-bundle": "@dev"
     },

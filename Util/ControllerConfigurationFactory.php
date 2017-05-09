@@ -27,7 +27,7 @@ class ControllerConfigurationFactory implements ControllerConfigurationFactoryIn
     public function createConfiguration(ConfigurationInterface $controllerConfiguration, $action, $alias, $module = null, $id = null) {
 
         $this->configuration = $controllerConfiguration;
-        $analyzeSection = $this->getAnalyzeSection($module, $alias, $id);
+        $analyzeSection = $this->getAnalyzeSection($action, $alias,$module);
         $this->mergeToConfiguration($this->baseConfiguration, $action);
         $this->mergeConfigurations($action, $alias, $module);
 
@@ -71,7 +71,7 @@ class ControllerConfigurationFactory implements ControllerConfigurationFactoryIn
     }
 
     protected function getAnalyzeSection($action, $alias, $module = null) {
-
+       
         $analyzeConfiguration = [];
         $analyzeConfiguration[self::PATH] = ['class'=>$this->mapper->getEntityClass($alias), 'action'=>$action, 'alias'=>$alias, 'module'=>$module];
 
@@ -80,32 +80,32 @@ class ControllerConfigurationFactory implements ControllerConfigurationFactoryIn
 
     protected function mergeConfigurations($action, $alias, $module = null) {
 
-        $configuration = $this->findSpecializedConfiguration($action, $alias, $module);
+        $configuration = $this->findSpecializedConfiguration( $alias, $module);
         if ($configuration) {
             $this->mergeToConfiguration($configuration, $action);
         }
         return $this->configuration;
     }
 
-    protected function findSpecializedConfiguration($action, $alias, $module = null) {
-
+    protected function findSpecializedConfiguration( $alias, $module = null) {
+        
         if ($module) {
-            if (array_key_exists($action, $this->configurations) && array_key_exists($alias, $this->configurations[$action]) && array_key_exists($module, $this->configurations[$action][$alias])) {
-                return $this->configuration[$action][$alias][$module];
+            if (array_key_exists($alias, $this->configurations) && array_key_exists($module, $this->configurations[$alias])) {
+                return $this->configurations[$alias][$module];
             }
         } else {
-            if (array_key_exists($action, $this->configurations) && array_key_exists($alias, $this->configurations[$action])) {
-                return $this->configuration[$action][$alias];
+            if ( array_key_exists($alias, $this->configurations)) {
+                return $this->configurations[$alias];
             }
         }
     }
 
-    public function addConfiguration(ConfigurationInterface $configuration, $action, $alias, $module = null) {
+    public function addConfiguration(ConfigurationInterface $configuration, /*$action,*/ $alias, $module = null) {
 
         if ($module) {
-            $this->configurations[$action][$alias][$module] = $configuration;
+            $this->configurations/*[$action]*/[$alias][$module] = $configuration;
         } else {
-            $this->configurations[$action][$alias] = $configuration;
+            $this->configurations/*[$action]*/[$alias] = $configuration;
         }
     }
 
